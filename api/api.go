@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/PhuPhuoc/curanest-patient-service/config"
 	"github.com/PhuPhuoc/curanest-patient-service/docs"
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
 	"github.com/gin-gonic/gin"
@@ -13,22 +14,21 @@ import (
 )
 
 type server struct {
-	address string
-	db      *sqlx.DB
+	port string
+	db   *sqlx.DB
 }
 
-func InitServerTemp(addr string) *server {
+func InitServer(port string, db *sqlx.DB) *server {
 	return &server{
-		address: addr,
+		port: port,
+		db:   db,
 	}
 }
 
-func InitServer(addr string, db *sqlx.DB) *server {
-	return &server{
-		address: addr,
-		db:      db,
-	}
-}
+const (
+	env_local = "local"
+	env_vps   = "vps"
+)
 
 // @BasePath		/api
 // @Summary		ping server
@@ -40,24 +40,30 @@ func InitServer(addr string, db *sqlx.DB) *server {
 // @Failure		400	{object}	error			"Bad request error"
 // @Router			/ping [get]
 func (sv *server) RunApp() error {
-	docs.SwaggerInfo.BasePath = "/api"
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
+	envDevlopment := config.AppConfig.EnvDev
+	if envDevlopment == env_local {
+		gin.SetMode(gin.ReleaseMode)
+		docs.SwaggerInfo.BasePath = "/"
+	}
+
+	if envDevlopment == env_vps {
+		gin.SetMode(gin.ReleaseMode)
+		docs.SwaggerInfo.BasePath = "/patient"
+	}
 
 	router := gin.New()
-	router.Use(
-		middleware.SkipSwaggerLog(),
-		gin.Recovery(),
-	)
+	router.Use(middleware.SkipSwaggerLog(), gin.Recovery())
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	api := router.Group("/api")
+	router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "curanest-patient-service - pong"}) })
 
-	/* ping - test */
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "curanest-patient-service - pong x777"})
-	})
-	/*
-		! start server here
-	*/
-	log.Println("server start listening at port: ", sv.address)
-	return router.Run(sv.address)
+	// api := router.Group("/api/v1")
+	// {
+	// }
+
+	// rpc := router.Group("/internal/rpc")
+	// {
+	// }
+	log.Println("server start listening at port: ", sv.port)
+	return router.Run(sv.port)
 }
