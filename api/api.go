@@ -4,9 +4,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/PhuPhuoc/curanest-patient-service/builder"
 	"github.com/PhuPhuoc/curanest-patient-service/config"
 	"github.com/PhuPhuoc/curanest-patient-service/docs"
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
+	relativeshttpservice "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/httpservice"
+	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	swaggerfiles "github.com/swaggo/files"
@@ -28,6 +31,9 @@ func InitServer(port string, db *sqlx.DB) *server {
 const (
 	env_local = "local"
 	env_vps   = "vps"
+
+	urlacc_local = "http://localhost:8001/"
+	urlacc_prod  = "http://auth_service:8080/"
 )
 
 // @BasePath		/api
@@ -40,16 +46,17 @@ const (
 // @Failure		400	{object}	error			"Bad request error"
 // @Router			/ping [get]
 func (sv *server) RunApp() error {
-	// gin.SetMode(gin.ReleaseMode)
+	var urlAccServices string
 	envDevlopment := config.AppConfig.EnvDev
 	if envDevlopment == env_local {
-		gin.SetMode(gin.ReleaseMode)
 		docs.SwaggerInfo.BasePath = "/"
+		urlAccServices = urlacc_local
 	}
 
 	if envDevlopment == env_vps {
 		gin.SetMode(gin.ReleaseMode)
 		docs.SwaggerInfo.BasePath = "/patient"
+		urlAccServices = urlacc_prod
 	}
 
 	router := gin.New()
@@ -57,9 +64,15 @@ func (sv *server) RunApp() error {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "curanest-patient-service - pong"}) })
 
-	// api := router.Group("/api/v1")
-	// {
-	// }
+	// *** usecase: command vs query
+	relatives_cmd_builder := relativescommands.NewRelativesCmdWithBuilder(
+		builder.NewRelativesBuilder(sv.db).AddUrlPathAccountService(urlAccServices),
+	)
+
+	api := router.Group("/api/v1")
+	{
+		relativeshttpservice.NewAccountHTTPService(relatives_cmd_builder).Routes(api)
+	}
 
 	// rpc := router.Group("/internal/rpc")
 	// {
