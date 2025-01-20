@@ -8,8 +8,15 @@ import (
 )
 
 type CreateRelativeAccountCmdDTO struct {
-	AccountInfoDTO
-	RelativesInfoDTO
+	FullName    string `json:"full-name"`
+	PhoneNumber string `json:"phone-number"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	Dob         string `json:"dob"`
+	Address     string `json:"address"`
+	Ward        string `json:"ward"`
+	District    string `json:"district"`
+	City        string `json:"city"`
 }
 
 type AccountInfoDTO struct {
@@ -18,14 +25,6 @@ type AccountInfoDTO struct {
 	PhoneNumber string `json:"phone-number"`
 	Email       string `json:"email"`
 	Password    string `json:"password"`
-}
-
-type RelativesInfoDTO struct {
-	Dob      string `json:"dob"`
-	Address  string `json:"address"`
-	Ward     string `json:"ward"`
-	District string `json:"district"`
-	City     string `json:"city"`
 }
 
 type createRelativesAccountHandler struct {
@@ -42,8 +41,14 @@ func NewCreateRelativesAccountHandler(cmdRepo RelativeCommandRepo, accService Ex
 
 func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateRelativeAccountCmdDTO) error {
 	// 1. call external service
-	dto.RoleName = "relatives"
-	accid, err := h.accService.Create(ctx, &dto.AccountInfoDTO)
+	accdto := &AccountInfoDTO{
+		RoleName:    "relatives",
+		FullName:    dto.FullName,
+		PhoneNumber: dto.PhoneNumber,
+		Email:       dto.Email,
+		Password:    dto.Password,
+	}
+	accid, err := h.accService.Create(ctx, accdto)
 	if err != nil {
 		return err
 	}

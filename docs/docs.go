@@ -111,9 +111,6 @@ const docTemplate = `{
                 "phone-number": {
                     "type": "string"
                 },
-                "role-name": {
-                    "type": "string"
-                },
                 "ward": {
                     "type": "string"
                 }

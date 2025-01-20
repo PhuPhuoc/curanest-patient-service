@@ -32,7 +32,6 @@ func (ex *externalAccountService) Create(ctx context.Context, entity *relativesc
 		fmt.Println("flagSuccess: ", flagSuccess)
 		if !flagSuccess {
 			responseErr, _ := response["error"].(string)
-			fmt.Println("responseErr: ", responseErr)
 			return nil, fmt.Errorf("%v", responseErr)
 		}
 	}
