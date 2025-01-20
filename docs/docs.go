@@ -15,6 +15,45 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/patients": {
+            "post": {
+                "description": "create patient profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "create patient profile",
+                "parameters": [
+                    {
+                        "description": "account creation data",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/patientcommands.CreatePatientProfileCmdDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/api/v1/relatives": {
             "post": {
                 "description": "create relatives account",
@@ -84,6 +123,38 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "patientcommands.CreatePatientProfileCmdDTO": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "dob": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full-name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone-number": {
+                    "type": "string"
+                },
+                "ward": {
+                    "type": "string"
+                }
+            }
+        },
         "relativescommands.CreateRelativeAccountCmdDTO": {
             "type": "object",
             "properties": {

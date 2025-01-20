@@ -6,7 +6,8 @@ CREATE TABLE `relatives` (
     `address` varchar(300) NOT NULL,
     `ward` varchar(70) DEFAULT NULL,
     `district` varchar(70) DEFAULT NULL,
-    `city` varchar(70) DEFAULT NULL
+    `city` varchar(70) DEFAULT NULL,
+    PRIMARY KEY (`id`)
 );
 -- +goose StatementEnd
 

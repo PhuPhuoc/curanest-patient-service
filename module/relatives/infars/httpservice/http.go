@@ -9,7 +9,7 @@ type relativesHttpService struct {
 	cmd relativescommands.Commands
 }
 
-func NewAccountHTTPService(cmd relativescommands.Commands) *relativesHttpService {
+func NewRelativesHTTPService(cmd relativescommands.Commands) *relativesHttpService {
 	return &relativesHttpService{
 		cmd: cmd,
 	}

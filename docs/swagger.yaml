@@ -1,4 +1,25 @@
 definitions:
+  patientcommands.CreatePatientProfileCmdDTO:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      district:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      full-name:
+        type: string
+      password:
+        type: string
+      phone-number:
+        type: string
+      ward:
+        type: string
+    type: object
   relativescommands.CreateRelativeAccountCmdDTO:
     properties:
       address:
@@ -25,6 +46,32 @@ info:
   title: Patient Service
   version: "1.0"
 paths:
+  /api/v1/patients:
+    post:
+      consumes:
+      - application/json
+      description: create patient profile
+      parameters:
+      - description: account creation data
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/patientcommands.CreatePatientProfileCmdDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      summary: create patient profile
+      tags:
+      - patient
   /api/v1/relatives:
     post:
       consumes:

@@ -8,6 +8,8 @@ import (
 	"github.com/PhuPhuoc/curanest-patient-service/config"
 	"github.com/PhuPhuoc/curanest-patient-service/docs"
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
+	patienthttpservice "github.com/PhuPhuoc/curanest-patient-service/module/patient/infars/httpservice"
+	patientcommands "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/commands"
 	relativeshttpservice "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/httpservice"
 	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
 	"github.com/gin-gonic/gin"
@@ -68,10 +70,14 @@ func (sv *server) RunApp() error {
 	relatives_cmd_builder := relativescommands.NewRelativesCmdWithBuilder(
 		builder.NewRelativesBuilder(sv.db).AddUrlPathAccountService(urlAccServices),
 	)
+	patient_cmd_builder := patientcommands.NewPatientCmdWithBuilder(
+		builder.NewPatientBuilder(sv.db),
+	)
 
 	api := router.Group("/api/v1")
 	{
-		relativeshttpservice.NewAccountHTTPService(relatives_cmd_builder).Routes(api)
+		relativeshttpservice.NewRelativesHTTPService(relatives_cmd_builder).Routes(api)
+		patienthttpservice.NewPatientHTTPService(patient_cmd_builder).Routes(api)
 	}
 
 	// rpc := router.Group("/internal/rpc")
