@@ -30,5 +30,5 @@ type RelativeCommandRepo interface {
 }
 
 type ExternalAccountService interface {
-	Create(ctx context.Context, entity *AccountInfoDTO) (uuid.UUID, error)
+	Create(ctx context.Context, entity *AccountInfoDTO) (*uuid.UUID, error)
 }

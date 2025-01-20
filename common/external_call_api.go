@@ -12,16 +12,11 @@ import (
 type RequestOptions struct {
 	Method  string      // "GET", "POST", "PUT", "DELETE"
 	URL     string      // Endpoint
-	Payload interface{} // data payload (optional)
+	Payload interface{} // Data payload (optional)
 	Token   string      // Token Bearer (optional)
 }
 
-type APIResponse struct {
-	StatusCode int
-	Body       []byte
-}
-
-func CallExternalAPI(ctx context.Context, opts RequestOptions) (*APIResponse, error) {
+func CallExternalAPI(ctx context.Context, opts RequestOptions) (map[string]interface{}, error) {
 	if opts.Method == "" {
 		return nil, errors.New("HTTP method is required")
 	}
@@ -29,7 +24,7 @@ func CallExternalAPI(ctx context.Context, opts RequestOptions) (*APIResponse, er
 		return nil, errors.New("URL is required")
 	}
 
-	// mapping payload
+	// Mapping payload
 	var body io.Reader
 	if opts.Payload != nil {
 		jsonData, err := json.Marshal(opts.Payload)
@@ -64,8 +59,10 @@ func CallExternalAPI(ctx context.Context, opts RequestOptions) (*APIResponse, er
 		return nil, err
 	}
 
-	return &APIResponse{
-		StatusCode: resp.StatusCode,
-		Body:       respBody,
-	}, nil
+	var result map[string]interface{}
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

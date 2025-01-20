@@ -2,6 +2,7 @@ package relativescommands
 
 import (
 	"context"
+	"fmt"
 
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
 )
@@ -12,7 +13,7 @@ type CreateRelativeAccountCmdDTO struct {
 }
 
 type AccountInfoDTO struct {
-	RoleName    string `json:"-"`
+	RoleName    string `json:"role-name"`
 	FullName    string `json:"full-name"`
 	PhoneNumber string `json:"phone-number"`
 	Email       string `json:"email"`
@@ -41,20 +42,22 @@ func NewCreateRelativesAccountHandler(cmdRepo RelativeCommandRepo, accService Ex
 
 func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateRelativeAccountCmdDTO) error {
 	// 1. call external service
+	dto.RoleName = "relatives"
 	accid, err := h.accService.Create(ctx, &dto.AccountInfoDTO)
 	if err != nil {
 		return err
 	}
+
 	// 2. create record in table relatives
+	if accid == nil {
+		return fmt.Errorf("failed to create account: received nil account ID")
+	}
 	entity, _ := relativesdomain.NewRelatives(
-		accid,
-		dto.Dob,
-		dto.Address,
-		dto.Ward,
+		*accid,
+		dto.Dob, dto.Address, dto.Ward,
 		dto.District,
 		dto.City,
 	)
-
 	if err = h.cmdRepo.Create(ctx, entity); err != nil {
 		return err
 	}

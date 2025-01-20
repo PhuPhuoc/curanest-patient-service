@@ -32,8 +32,8 @@ const (
 	env_local = "local"
 	env_vps   = "vps"
 
-	urlacc_local = "http://localhost:8001/"
-	urlacc_prod  = "http://auth_service:8080/"
+	urlacc_local = "http://localhost:8001"
+	urlacc_prod  = "http://auth_service:8080"
 )
 
 // @BasePath		/api
