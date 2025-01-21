@@ -53,6 +53,17 @@ func NewBadRequestError() *AppError {
 	}
 }
 
+func NewUnauthorizedError() *AppError {
+	file, line := getCallerInfo()
+	return &AppError{
+		Message: "Unauthorized",
+		Code:    http.StatusUnauthorized,
+		File:    file,
+		Line:    line,
+		// Details:     make(map[string]interface{}),
+	}
+}
+
 func NewInternalServerError() *AppError {
 	file, line := getCallerInfo()
 	return &AppError{
@@ -92,7 +103,7 @@ func getCallerInfo() (string, int) {
 }
 
 func (e *AppError) Error() string {
-	return e.Message
+	return e.Message + " - " + e.ReasonField + " - " + e.Inner
 }
 
 //	func (e *AppError) WithDetail(key string, value interface{}) *AppError {

@@ -5,6 +5,8 @@ definitions:
         type: string
       city:
         type: string
+      desc-pathology:
+        type: string
       district:
         type: string
       dob:
@@ -12,6 +14,8 @@ definitions:
       email:
         type: string
       full-name:
+        type: string
+      note-for-nurse:
         type: string
       password:
         type: string
@@ -69,6 +73,8 @@ paths:
         "400":
           description: Bad request error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: create patient profile
       tags:
       - patient
@@ -117,4 +123,9 @@ paths:
       summary: ping server
       tags:
       - ping
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -2,43 +2,37 @@ package common
 
 import "github.com/google/uuid"
 
+const (
+	KeyRequester = "requester"
+)
+
 type Requester interface {
 	UserId() uuid.UUID
 	TokenId() uuid.UUID
-	FirstName() string
-	LastName() string
 	Role() string
-	Status() string
 }
-
 type requesterData struct {
-	userId    uuid.UUID
-	tid       uuid.UUID
-	firstName string
-	lastName  string
-	role      string
-	status    string
+	sub  uuid.UUID
+	id   uuid.UUID
+	role string
 }
 
 func (r *requesterData) UserId() uuid.UUID {
-	return r.userId
+	return r.sub
 }
 
 func (r *requesterData) TokenId() uuid.UUID {
-	return r.tid
+	return r.id
 }
-func (r *requesterData) FirstName() string { return r.firstName }
-func (r *requesterData) LastName() string  { return r.lastName }
-func (r *requesterData) Role() string      { return r.role }
-func (r *requesterData) Status() string    { return r.status }
 
-func NewRequester(sub, tid uuid.UUID, firstName, lastName, role, status string) Requester {
+func (r *requesterData) Role() string {
+	return r.role
+}
+
+func NewRequester(sub, tid uuid.UUID, role string) Requester {
 	return &requesterData{
-		userId:    sub,
-		tid:       tid,
-		firstName: firstName,
-		lastName:  lastName,
-		role:      role,
-		status:    status,
+		sub:  sub,
+		id:   tid,
+		role: role,
 	}
 }

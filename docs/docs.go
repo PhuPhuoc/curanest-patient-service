@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/patients": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create patient profile",
                 "consumes": [
                     "application/json"
@@ -132,6 +137,9 @@ const docTemplate = `{
                 "city": {
                     "type": "string"
                 },
+                "desc-pathology": {
+                    "type": "string"
+                },
                 "district": {
                     "type": "string"
                 },
@@ -142,6 +150,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "full-name": {
+                    "type": "string"
+                },
+                "note-for-nurse": {
                     "type": "string"
                 },
                 "password": {
@@ -186,6 +197,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

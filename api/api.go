@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/PhuPhuoc/curanest-patient-service/builder"
+	"github.com/PhuPhuoc/curanest-patient-service/common"
 	"github.com/PhuPhuoc/curanest-patient-service/config"
 	"github.com/PhuPhuoc/curanest-patient-service/docs"
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
@@ -66,6 +67,7 @@ func (sv *server) RunApp() error {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "curanest-patient-service - pong"}) })
 
+	authClient := common.NewJWTx(config.AppConfig.Key)
 	// *** usecase: command vs query
 	relatives_cmd_builder := relativescommands.NewRelativesCmdWithBuilder(
 		builder.NewRelativesBuilder(sv.db).AddUrlPathAccountService(urlAccServices),
@@ -77,7 +79,7 @@ func (sv *server) RunApp() error {
 	api := router.Group("/api/v1")
 	{
 		relativeshttpservice.NewRelativesHTTPService(relatives_cmd_builder).Routes(api)
-		patienthttpservice.NewPatientHTTPService(patient_cmd_builder).Routes(api)
+		patienthttpservice.NewPatientHTTPService(patient_cmd_builder).AddAuth(authClient).Routes(api)
 	}
 
 	// rpc := router.Group("/internal/rpc")

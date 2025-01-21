@@ -2,8 +2,8 @@ package relativescommands
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
 )
 
@@ -50,12 +50,15 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 	}
 	accid, err := h.accService.Create(ctx, accdto)
 	if err != nil {
-		return err
+		return common.NewInternalServerError().
+			WithReason("cannot create account for relatives").
+			WithInner(err.Error())
 	}
 
 	// 2. create record in table relatives
 	if accid == nil {
-		return fmt.Errorf("failed to create account: received nil account ID")
+		return common.NewInternalServerError().
+			WithReason("cannot create account for relatives - cannot get account id")
 	}
 	entity, _ := relativesdomain.NewRelatives(
 		*accid,
@@ -64,7 +67,9 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 		dto.City,
 	)
 	if err = h.cmdRepo.Create(ctx, entity); err != nil {
-		return err
+		return common.NewInternalServerError().
+			WithReason("cannot create relatives info").
+			WithInner(err.Error())
 	}
 
 	return nil

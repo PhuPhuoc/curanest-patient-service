@@ -8,8 +8,11 @@ import (
 	"github.com/PhuPhuoc/curanest-patient-service/db/mysql"
 )
 
-// @title		Patient Service
-// @version	1.0
+//	@title						Patient Service
+//	@version					1.0
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
 func main() {
 	config.LoadConfig()
 	db := mysql.ConnectDB()

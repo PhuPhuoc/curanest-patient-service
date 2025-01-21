@@ -8,6 +8,11 @@
     "paths": {
         "/api/v1/patients": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create patient profile",
                 "consumes": [
                     "application/json"
@@ -123,6 +128,9 @@
                 "city": {
                     "type": "string"
                 },
+                "desc-pathology": {
+                    "type": "string"
+                },
                 "district": {
                     "type": "string"
                 },
@@ -133,6 +141,9 @@
                     "type": "string"
                 },
                 "full-name": {
+                    "type": "string"
+                },
+                "note-for-nurse": {
                     "type": "string"
                 },
                 "password": {
@@ -177,6 +188,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
