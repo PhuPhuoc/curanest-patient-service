@@ -3,17 +3,20 @@ package patienthttpservice
 import (
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
 	patientcommands "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/commands"
+	patientqueries "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/queries"
 	"github.com/gin-gonic/gin"
 )
 
 type patientHttpService struct {
-	cmd  patientcommands.Commands
-	auth middleware.AuthClient
+	cmd   patientcommands.Commands
+	query patientqueries.Queries
+	auth  middleware.AuthClient
 }
 
-func NewPatientHTTPService(cmd patientcommands.Commands) *patientHttpService {
+func NewPatientHTTPService(cmd patientcommands.Commands, query patientqueries.Queries) *patientHttpService {
 	return &patientHttpService{
-		cmd: cmd,
+		cmd:   cmd,
+		query: query,
 	}
 }
 
@@ -30,6 +33,12 @@ func (s *patientHttpService) Routes(g *gin.RouterGroup) {
 			middleware.RequireAuth(s.auth),
 			middleware.RequireRole("relatives"),
 			s.handleCreatePatientProfile(),
+		)
+
+		patient_route.GET("/relatives",
+			middleware.RequireAuth(s.auth),
+			middleware.RequireRole("relatives"),
+			s.handleGetMyPatient(),
 		)
 	}
 }

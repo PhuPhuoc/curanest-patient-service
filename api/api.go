@@ -11,6 +11,7 @@ import (
 	"github.com/PhuPhuoc/curanest-patient-service/middleware"
 	patienthttpservice "github.com/PhuPhuoc/curanest-patient-service/module/patient/infars/httpservice"
 	patientcommands "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/commands"
+	patientqueries "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/queries"
 	relativeshttpservice "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/httpservice"
 	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
 	"github.com/gin-gonic/gin"
@@ -75,11 +76,14 @@ func (sv *server) RunApp() error {
 	patient_cmd_builder := patientcommands.NewPatientCmdWithBuilder(
 		builder.NewPatientBuilder(sv.db),
 	)
+	patient_query_builder := patientqueries.NewPatientQueryWithBuilder(
+		builder.NewPatientBuilder(sv.db),
+	)
 
 	api := router.Group("/api/v1")
 	{
 		relativeshttpservice.NewRelativesHTTPService(relatives_cmd_builder).Routes(api)
-		patienthttpservice.NewPatientHTTPService(patient_cmd_builder).AddAuth(authClient).Routes(api)
+		patienthttpservice.NewPatientHTTPService(patient_cmd_builder, patient_query_builder).AddAuth(authClient).Routes(api)
 	}
 
 	// rpc := router.Group("/internal/rpc")

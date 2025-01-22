@@ -17,8 +17,6 @@ definitions:
         type: string
       note-for-nurse:
         type: string
-      password:
-        type: string
       phone-number:
         type: string
       ward:
@@ -47,6 +45,12 @@ definitions:
     type: object
 info:
   contact: {}
+  description: |-
+    Auth-service: https://api.curanest.com.vn/auth/swagger/index.html.
+    Patient-service: https://api.curanest.com.vn/auth/swagger/index.html.
+    Nurse-service: https://api.curanest.com.vn/auth/swagger/index.html.
+    Appointment-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
+    Notification-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
   title: Patient Service
   version: "1.0"
 paths:
@@ -76,6 +80,27 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: create patient profile
+      tags:
+      - patient
+  /api/v1/patients/relatives:
+    get:
+      consumes:
+      - application/json
+      description: get all patients belong to relatives user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: get all patients belong to relatives user
       tags:
       - patient
   /api/v1/relatives:

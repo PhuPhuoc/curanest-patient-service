@@ -8,11 +8,16 @@ import (
 	"github.com/PhuPhuoc/curanest-patient-service/db/mysql"
 )
 
-//	@title						Patient Service
-//	@version					1.0
-//	@securityDefinitions.apikey	ApiKeyAuth
-//	@in							header
-//	@name						Authorization
+// @title						Patient Service
+// @version					1.0
+// @description				Auth-service: https://api.curanest.com.vn/auth/swagger/index.html.
+// @description				Patient-service: https://api.curanest.com.vn/auth/swagger/index.html.
+// @description				Nurse-service: https://api.curanest.com.vn/auth/swagger/index.html.
+// @description				Appointment-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
+// @description				Notification-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
 func main() {
 	config.LoadConfig()
 	db := mysql.ConnectDB()

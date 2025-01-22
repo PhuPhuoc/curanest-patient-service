@@ -12,7 +12,6 @@ type CreatePatientProfileCmdDTO struct {
 	FullName      string `json:"full-name"`
 	PhoneNumber   string `json:"phone-number"`
 	Email         string `json:"email"`
-	Password      string `json:"password"`
 	Dob           string `json:"dob"`
 	Address       string `json:"address"`
 	Ward          string `json:"ward"`
