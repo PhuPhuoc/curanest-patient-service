@@ -4,7 +4,6 @@ import (
 	"context"
 
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
-	"github.com/google/uuid"
 )
 
 type Commands struct {
@@ -30,5 +29,5 @@ type RelativeCommandRepo interface {
 }
 
 type ExternalAccountService interface {
-	CreateAccount(ctx context.Context, entity *AccountInfoDTO) (*uuid.UUID, error)
+	CreateAccount(ctx context.Context, entity *AccountInfoDTO) (*ResponseCreateAccountDTO, error)
 }

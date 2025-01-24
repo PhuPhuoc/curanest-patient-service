@@ -30,5 +30,5 @@ type RelativesQueryRepo interface {
 }
 
 type ExternalAccountService interface {
-	GetAccountProfile(ctx context.Context) (*MyAccountDTO, error)
+	GetAccountProfile(ctx context.Context) (*ResponseAccountDTO, error)
 }

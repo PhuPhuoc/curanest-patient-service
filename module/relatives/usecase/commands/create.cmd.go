@@ -6,6 +6,7 @@ import (
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
+	"github.com/google/uuid"
 )
 
 type CreateRelativeAccountCmdDTO struct {
@@ -40,6 +41,10 @@ func NewCreateRelativesAccountHandler(cmdRepo RelativeCommandRepo, accService Ex
 	}
 }
 
+type ResponseCreateAccountDTO struct {
+	Id string `json:"id"`
+}
+
 func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateRelativeAccountCmdDTO) error {
 	// 1. call external service
 	accdto := &AccountInfoDTO{
@@ -50,21 +55,21 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 		Password:    dto.Password,
 	}
 
-	accid, err := h.accService.CreateAccount(ctx, accdto)
+	resp, err := h.accService.CreateAccount(ctx, accdto)
 	if err != nil {
-		fmt.Println("error: ", err.Error())
-		return common.NewInternalServerError().
-			WithReason("cannot create account for relatives").
-			WithInner(err.Error())
+		fmt.Println("error: ", err)
+		return err
 	}
 
-	// 2. create record in table relatives
-	if accid == nil {
+	if resp.Id == "" {
 		return common.NewInternalServerError().
 			WithReason("cannot create account for relatives - cannot get account id")
 	}
+
+	// 2. create record in table relatives
+	accid := uuid.MustParse(resp.Id)
 	entity, _ := relativesdomain.NewRelatives(
-		*accid,
+		accid,
 		dto.Dob, dto.Address, dto.Ward,
 		dto.District,
 		dto.City,

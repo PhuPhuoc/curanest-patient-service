@@ -8,7 +8,7 @@ import (
 	relativesqueries "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/queries"
 )
 
-func (ex *externalAccountService) GetAccountProfile(ctx context.Context) (*relativesqueries.MyAccountDTO, error) {
+func (ex *externalAccountService) GetAccountProfile(ctx context.Context) (*relativesqueries.ResponseAccountDTO, error) {
 	token, ok := ctx.Value(common.KeyToken).(string)
 	if !ok {
 		return nil, fmt.Errorf("missing token to fetching data from other service")
@@ -18,19 +18,14 @@ func (ex *externalAccountService) GetAccountProfile(ctx context.Context) (*relat
 		URL:    ex.apiURL + "/external/rpc/accounts/me",
 		Token:  token,
 	})
-	fmt.Println("URL: " + ex.apiURL + "/external/rpc/accounts/me")
 	if err != nil {
-		return nil, fmt.Errorf("cannot call external api - %v", err)
+		resp := common.NewInternalServerError().WithReason("cannot call external api: " + err.Error())
+		return nil, resp
 	}
-	success, ok := response["success"]
-	if ok {
-		flagSuccess, _ := success.(bool)
-		if !flagSuccess {
-			responseErr, _ := response["error"].(string)
-			return nil, fmt.Errorf("%v", responseErr)
-		}
+	success, ok := response["success"].(bool)
+	if !ok || !success {
+		return nil, common.ExtractErrorFromResponse(response)
 	}
 
-	fmt.Println("response: ", response)
-	return nil, nil
+	return common.ExtractDataFromResponse[relativesqueries.ResponseAccountDTO](response)
 }

@@ -2,10 +2,10 @@ package relativesqueries
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
+	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
 	"github.com/google/uuid"
 )
 
@@ -21,12 +21,12 @@ func NewGetMyRelativesAccountHandler(queryRepo RelativesQueryRepo, accRPC Extern
 	}
 }
 
-type MyProfileDTO struct {
-	MyAccountDTO
-	MyRelativesInfoDTO
+type ResponseProfileDTO struct {
+	*ResponseAccountDTO
+	*RelativesInfoDTO
 }
 
-type MyAccountDTO struct {
+type ResponseAccountDTO struct {
 	Id          uuid.UUID `json:"id"`
 	Role        string    `json:"role"`
 	FullName    string    `json:"full-name"`
@@ -36,7 +36,7 @@ type MyAccountDTO struct {
 	CreatedAt   time.Time `json:"created-at"`
 }
 
-type MyRelativesInfoDTO struct {
+type RelativesInfoDTO struct {
 	Dob      string `json:"dob"`
 	Address  string `json:"address"`
 	Ward     string `json:"ward"`
@@ -44,14 +44,32 @@ type MyRelativesInfoDTO struct {
 	City     string `json:"city"`
 }
 
-func (h *getMyProfileHandler) Handle(ctx context.Context) (*MyProfileDTO, error) {
+func toDTO(data *relativesdomain.Relatives) *RelativesInfoDTO {
+	dto := &RelativesInfoDTO{
+		Dob:      data.GetDOB(),
+		Address:  data.GetAddress(),
+		Ward:     data.GetWard(),
+		District: data.GetDistrict(),
+		City:     data.GetCity(),
+	}
+	return dto
+}
+
+func (h *getMyProfileHandler) Handle(ctx context.Context) (*ResponseProfileDTO, error) {
 	accdto, err := h.accRPC.GetAccountProfile(ctx)
 	if err != nil {
-		return nil, common.NewInternalServerError().
-			WithReason("cannot get profile account info of relatives").
-			WithInner(err.Error())
+		return nil, err
 	}
 
-	fmt.Println("accdto: ", accdto)
-	return nil, nil
+	reldto, err := h.queryRepo.FindById(ctx, accdto.Id)
+	if err != nil {
+		return nil, common.NewInternalServerError().
+			WithReason("cannot relatives info").WithInner(err.Error())
+	}
+
+	resp := &ResponseProfileDTO{
+		accdto, toDTO(reldto),
+	}
+
+	return resp, nil
 }
