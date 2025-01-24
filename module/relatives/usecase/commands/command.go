@@ -13,14 +13,14 @@ type Commands struct {
 
 type Builder interface {
 	BuildRelativesCmdRepo() RelativeCommandRepo
-	BuildExternalAccountService() ExternalAccountService
+	BuildExternalAccountServiceInCmd() ExternalAccountService
 }
 
 func NewRelativesCmdWithBuilder(b Builder) Commands {
 	return Commands{
 		CreateRelativesAccount: NewCreateRelativesAccountHandler(
 			b.BuildRelativesCmdRepo(),
-			b.BuildExternalAccountService(),
+			b.BuildExternalAccountServiceInCmd(),
 		),
 	}
 }
@@ -30,5 +30,5 @@ type RelativeCommandRepo interface {
 }
 
 type ExternalAccountService interface {
-	Create(ctx context.Context, entity *AccountInfoDTO) (*uuid.UUID, error)
+	CreateAccount(ctx context.Context, entity *AccountInfoDTO) (*uuid.UUID, error)
 }

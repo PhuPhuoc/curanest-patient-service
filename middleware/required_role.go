@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"fmt"
-
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	"github.com/gin-gonic/gin"
 )
@@ -11,20 +9,21 @@ func RequireRole(allowedRoles ...string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		req, ok := ctx.Request.Context().Value(common.KeyRequester).(common.Requester)
 		if !ok {
-			common.ResponseUnauthorizedError(ctx, "cannot found requester info")
+			err := common.NewUnauthorizedError().WithReason("cannot found requester data")
+			common.ResponseError(ctx, err)
 			ctx.Abort()
 			return
 		}
 
 		for _, role := range allowedRoles {
 			if req.Role() == role {
-				fmt.Println("role check role: ", req.Role())
 				ctx.Next()
 				return
 			}
 		}
 
-		common.ResponseFobiddenError(ctx, "your role cannot use this api")
+		err := common.NewForbiddenError().WithReason("your role cannot call this api")
+		common.ResponseError(ctx, err)
 		ctx.Abort()
 	}
 }

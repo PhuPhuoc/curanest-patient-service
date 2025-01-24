@@ -129,6 +129,27 @@ paths:
       summary: create relatives account
       tags:
       - relative
+  /api/v1/relatives/me:
+    get:
+      consumes:
+      - application/json
+      description: get profile of relatives account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: get profile of relatives account
+      tags:
+      - relative
   /ping:
     get:
       consumes:

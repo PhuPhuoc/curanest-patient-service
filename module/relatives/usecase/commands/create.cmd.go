@@ -2,6 +2,7 @@ package relativescommands
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
@@ -48,8 +49,10 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 		Email:       dto.Email,
 		Password:    dto.Password,
 	}
-	accid, err := h.accService.Create(ctx, accdto)
+
+	accid, err := h.accService.CreateAccount(ctx, accdto)
 	if err != nil {
+		fmt.Println("error: ", err.Error())
 		return common.NewInternalServerError().
 			WithReason("cannot create account for relatives").
 			WithInner(err.Error())

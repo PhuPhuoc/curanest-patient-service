@@ -3,6 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/PhuPhuoc/curanest-patient-service/builder"
 	"github.com/PhuPhuoc/curanest-patient-service/common"
@@ -14,6 +15,8 @@ import (
 	patientqueries "github.com/PhuPhuoc/curanest-patient-service/module/patient/usecase/queries"
 	relativeshttpservice "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/httpservice"
 	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
+	relativesqueries "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/queries"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	swaggerfiles "github.com/swaggo/files"
@@ -58,12 +61,22 @@ func (sv *server) RunApp() error {
 	}
 
 	if envDevlopment == env_vps {
-		gin.SetMode(gin.ReleaseMode)
+		// gin.SetMode(gin.ReleaseMode)
 		docs.SwaggerInfo.BasePath = "/patient"
 		urlAccServices = urlacc_prod
 	}
 
 	router := gin.New()
+
+	configcors := cors.DefaultConfig()
+	configcors.AllowAllOrigins = true
+	configcors.AllowMethods = []string{"POST", "GET", "PUT", "OPTIONS"}
+	configcors.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", "Accept", "User-Agent", "Cache-Control", "Pragma"}
+	configcors.ExposeHeaders = []string{"Content-Length"}
+	configcors.AllowCredentials = true
+	configcors.MaxAge = 12 * time.Hour
+
+	router.Use(cors.New(configcors))
 	router.Use(middleware.SkipSwaggerLog(), gin.Recovery())
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.GET("/ping", func(c *gin.Context) { c.JSON(http.StatusOK, gin.H{"message": "curanest-patient-service - pong"}) })
@@ -73,6 +86,10 @@ func (sv *server) RunApp() error {
 	relatives_cmd_builder := relativescommands.NewRelativesCmdWithBuilder(
 		builder.NewRelativesBuilder(sv.db).AddUrlPathAccountService(urlAccServices),
 	)
+	relatives_query_builder := relativesqueries.NewRelativesQueryWithBuilder(
+		builder.NewRelativesBuilder(sv.db).AddUrlPathAccountService(urlAccServices),
+	)
+
 	patient_cmd_builder := patientcommands.NewPatientCmdWithBuilder(
 		builder.NewPatientBuilder(sv.db),
 	)
@@ -82,7 +99,7 @@ func (sv *server) RunApp() error {
 
 	api := router.Group("/api/v1")
 	{
-		relativeshttpservice.NewRelativesHTTPService(relatives_cmd_builder).Routes(api)
+		relativeshttpservice.NewRelativesHTTPService(relatives_cmd_builder, relatives_query_builder).AddAuth(authClient).Routes(api)
 		patienthttpservice.NewPatientHTTPService(patient_cmd_builder, patient_query_builder).AddAuth(authClient).Routes(api)
 	}
 

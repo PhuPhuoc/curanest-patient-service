@@ -19,6 +19,7 @@ func RequireAuth(ac AuthClient) func(*gin.Context) {
 	return func(ctx *gin.Context) {
 		token, err := extractTokenFromHeaderString(ctx.GetHeader("Authorization"))
 		if err != nil {
+			err := common.NewUnauthorizedError().WithReason("cannot found token or missing access token")
 			common.ResponseError(ctx, err)
 			ctx.Abort()
 			return
@@ -26,6 +27,7 @@ func RequireAuth(ac AuthClient) func(*gin.Context) {
 
 		requester, err := introspectToken(ctx.Request.Context(), ac, token)
 		if err != nil {
+			err := common.NewUnauthorizedError().WithReason("error when introspect token")
 			common.ResponseError(ctx, err)
 			ctx.Abort()
 			return

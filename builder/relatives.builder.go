@@ -4,6 +4,7 @@ import (
 	relativesexternalrpc "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/externalrpc"
 	relativesrepository "github.com/PhuPhuoc/curanest-patient-service/module/relatives/infars/repository"
 	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
+	relativesqueries "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/queries"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -21,14 +22,18 @@ func (s builderOfRelatives) AddUrlPathAccountService(url string) builderOfRelati
 	return s
 }
 
-func (s builderOfRelatives) BuildExternalAccountService() relativescommands.ExternalAccountService {
-	return relativesexternalrpc.NewAccountService(s.urlPathAccountService)
+func (s builderOfRelatives) BuildExternalAccountServiceInCmd() relativescommands.ExternalAccountService {
+	return relativesexternalrpc.NewAccountRPC(s.urlPathAccountService)
 }
 
 func (s builderOfRelatives) BuildRelativesCmdRepo() relativescommands.RelativeCommandRepo {
 	return relativesrepository.NewRelativesRepo(s.db)
 }
 
-// func (s builderForRole) BuildRoleQueryRepo() rolequeries.RoleQueryRepo {
-// 	return rolerepository.NewRoleRepo(s.db)
-// }
+func (s builderOfRelatives) BuildRelativesQueryRepo() relativesqueries.RelativesQueryRepo {
+	return relativesrepository.NewRelativesRepo(s.db)
+}
+
+func (s builderOfRelatives) BuildExternalAccountServiceInQuery() relativesqueries.ExternalAccountService {
+	return relativesexternalrpc.NewAccountRPC(s.urlPathAccountService)
+}
