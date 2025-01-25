@@ -8,7 +8,8 @@ import (
 )
 
 type Queries struct {
-	GetMyProfile *getMyProfileHandler
+	GetMyProfile     *getMyProfileHandler
+	GetAccWithFilter *getAccountWithFilterHandler
 }
 
 type Builder interface {
@@ -22,6 +23,9 @@ func NewRelativesQueryWithBuilder(b Builder) Queries {
 			b.BuildRelativesQueryRepo(),
 			b.BuildExternalAccountServiceInQuery(),
 		),
+		GetAccWithFilter: NewGetAccountWithFilterHandler(
+			b.BuildExternalAccountServiceInQuery(),
+		),
 	}
 }
 
@@ -30,5 +34,6 @@ type RelativesQueryRepo interface {
 }
 
 type ExternalAccountService interface {
-	GetAccountProfile(ctx context.Context) (*ResponseAccountDTO, error)
+	GetAccountProfileRPC(ctx context.Context) (*ResponseAccountDTO, error)
+	GetAccountWithFilterRPC(ctx context.Context, filter *FilterAccountQuery) ([]AccountDTO, error)
 }

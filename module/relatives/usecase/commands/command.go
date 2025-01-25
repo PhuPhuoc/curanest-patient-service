@@ -29,5 +29,5 @@ type RelativeCommandRepo interface {
 }
 
 type ExternalAccountService interface {
-	CreateAccount(ctx context.Context, entity *AccountInfoDTO) (*ResponseCreateAccountDTO, error)
+	CreateAccountRPC(ctx context.Context, entity *AccountInfoDTO) (*ResponseCreateAccountDTO, error)
 }

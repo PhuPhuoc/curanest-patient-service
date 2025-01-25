@@ -131,6 +131,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/relatives/filter": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get relatives accounts with filter option",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "relative"
+                ],
+                "summary": "get relatives accounts with filter option",
+                "parameters": [
+                    {
+                        "description": "account creation data",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/relativesqueries.FilterAccountQuery"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/api/v1/relatives/me": {
             "get": {
                 "security": [
@@ -194,6 +238,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "common.Paging": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "patientcommands.CreatePatientProfileCmdDTO": {
             "type": "object",
             "properties": {
@@ -260,6 +318,34 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "relativesqueries.FieldFilterAccount": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "full-name": {
+                    "type": "string"
+                },
+                "phone-number": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "relativesqueries.FilterAccountQuery": {
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "$ref": "#/definitions/relativesqueries.FieldFilterAccount"
+                },
+                "paging": {
+                    "$ref": "#/definitions/common.Paging"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -278,7 +364,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Patient Service",
-	Description:      "Auth-service: https://api.curanest.com.vn/auth/swagger/index.html.\nPatient-service: https://api.curanest.com.vn/auth/swagger/index.html.\nNurse-service: https://api.curanest.com.vn/auth/swagger/index.html.\nAppointment-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.\nNotification-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.",
+	Description:      "Auth-service: https://api.curanest.com.vn/auth/swagger/index.html.\nPatient-service: https://api.curanest.com.vn/patient/swagger/index.html.\nNurse-service: https://api.curanest.com.vn/nurse/swagger/index.html.\nAppointment-service (not ready - expected): https://api.curanest.com.vn/appointment/swagger/index.html.\nNotification-service (not ready - expected): https://api.curanest.com.vn/notification/swagger/index.html.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

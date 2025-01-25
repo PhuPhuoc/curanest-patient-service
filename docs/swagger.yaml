@@ -1,4 +1,13 @@
 definitions:
+  common.Paging:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+      total:
+        type: integer
+    type: object
   patientcommands.CreatePatientProfileCmdDTO:
     properties:
       address:
@@ -43,14 +52,32 @@ definitions:
       ward:
         type: string
     type: object
+  relativesqueries.FieldFilterAccount:
+    properties:
+      email:
+        type: string
+      full-name:
+        type: string
+      phone-number:
+        type: string
+      role:
+        type: string
+    type: object
+  relativesqueries.FilterAccountQuery:
+    properties:
+      filter:
+        $ref: '#/definitions/relativesqueries.FieldFilterAccount'
+      paging:
+        $ref: '#/definitions/common.Paging'
+    type: object
 info:
   contact: {}
   description: |-
     Auth-service: https://api.curanest.com.vn/auth/swagger/index.html.
-    Patient-service: https://api.curanest.com.vn/auth/swagger/index.html.
-    Nurse-service: https://api.curanest.com.vn/auth/swagger/index.html.
-    Appointment-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
-    Notification-service (not ready - expected): https://api.curanest.com.vn/auth/swagger/index.html.
+    Patient-service: https://api.curanest.com.vn/patient/swagger/index.html.
+    Nurse-service: https://api.curanest.com.vn/nurse/swagger/index.html.
+    Appointment-service (not ready - expected): https://api.curanest.com.vn/appointment/swagger/index.html.
+    Notification-service (not ready - expected): https://api.curanest.com.vn/notification/swagger/index.html.
   title: Patient Service
   version: "1.0"
 paths:
@@ -127,6 +154,34 @@ paths:
           description: Bad request error
           schema: {}
       summary: create relatives account
+      tags:
+      - relative
+  /api/v1/relatives/filter:
+    post:
+      consumes:
+      - application/json
+      description: get relatives accounts with filter option
+      parameters:
+      - description: account creation data
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/relativesqueries.FilterAccountQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: get relatives accounts with filter option
       tags:
       - relative
   /api/v1/relatives/me:

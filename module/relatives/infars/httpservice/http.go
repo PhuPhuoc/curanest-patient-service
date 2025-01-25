@@ -34,5 +34,10 @@ func (s *relativesHttpService) Routes(g *gin.RouterGroup) {
 			middleware.RequireAuth(s.auth),
 			s.handleGetProfile(),
 		)
+		relatives_route.POST(
+			"/filter",
+			middleware.RequireAuth(s.auth),
+			s.handleGetRelativesAccounts(),
+		)
 	}
 }

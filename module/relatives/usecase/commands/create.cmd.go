@@ -55,7 +55,7 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 		Password:    dto.Password,
 	}
 
-	resp, err := h.accService.CreateAccount(ctx, accdto)
+	resp, err := h.accService.CreateAccountRPC(ctx, accdto)
 	if err != nil {
 		fmt.Println("error: ", err)
 		return err
