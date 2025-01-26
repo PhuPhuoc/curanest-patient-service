@@ -7,17 +7,17 @@ import (
 	"github.com/google/uuid"
 )
 
-//	@Summary		update patient profile
-//	@Description	update patient profile
-//	@Tags			patient
-//	@Accept			json
-//	@Produce		json
-//	@Param			patient-id	path		string					true									"Patient ID (UUID)"
-//	@Param			update		form		body					patientcommands.PatientProfileCmdDTO	true	"account creation data"
-//	@Success		200			{object}	map[string]interface{}	"data"
-//	@Failure		400			{object}	error					"Bad request error"
-//	@Router			/api/v1/patients/{patient-id} [put]
-//	@Security		ApiKeyAuth
+// @Summary		update patient profile
+// @Description	update patient profile
+// @Tags			patient
+// @Accept			json
+// @Produce		json
+// @Param			patient-id	path		string					true									"Patient ID (UUID)"
+// @Param			update		form		body					patientcommands.PatientProfileCmdDTO	true	"account creation data"
+// @Success		201			{object}	map[string]interface{}	"data"
+// @Failure		401			{object}	error					"Bad request error"
+// @Router			/api/v2/patients/{patient-id} [put]
+// @Security		ApiKeyAuth
 func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var dto patientcommands.PatientProfileCmdDTO
@@ -38,14 +38,14 @@ func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 			return
 		}
 
-		requester, ok := ctx.Value(common.KeyRequester).(common.Requester)
+		requester, ok := ctx.Request.Context().Value(common.KeyRequester).(common.Requester)
 		if !ok {
-			common.ResponseError(ctx, common.NewUnauthorizedError())
+			common.ResponseError(ctx, common.NewUnauthorizedError().WithReason("cannot found requester"))
 			return
 		}
 		sub := requester.UserId()
 
-		patient, err := s.query.FindById.Handle(ctx, &sub)
+		patient, err := s.query.FindById.Handle(ctx, &patientUUID)
 		if err != nil {
 			common.ResponseError(ctx, err)
 			return

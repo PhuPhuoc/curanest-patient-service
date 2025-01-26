@@ -92,57 +92,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/patients/{patient-id}": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "update patient profile",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "patient"
-                ],
-                "summary": "update patient profile",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Patient ID (UUID)",
-                        "name": "patient-id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "account creation data",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/patientcommands.PatientProfileCmdDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "data",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request error",
-                        "schema": {}
-                    }
-                }
-            }
-        },
         "/api/v1/relatives": {
             "post": {
                 "description": "create relatives account",
@@ -259,6 +208,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v2/patients/{patient-id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update patient profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "update patient profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient ID (UUID)",
+                        "name": "patient-id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "account creation data",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/patientcommands.PatientProfileCmdDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "ping server",
@@ -319,9 +319,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "dob": {
-                    "type": "string"
-                },
-                "email": {
                     "type": "string"
                 },
                 "full-name": {
