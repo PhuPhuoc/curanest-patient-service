@@ -111,6 +111,39 @@ paths:
       summary: create patient profile
       tags:
       - patient
+  /api/v1/patients/{patient-id}:
+    put:
+      consumes:
+      - application/json
+      description: update patient profile
+      parameters:
+      - description: Patient ID (UUID)
+        in: path
+        name: patient-id
+        required: true
+        type: string
+      - description: account creation data
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/patientcommands.PatientProfileCmdDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: update patient profile
+      tags:
+      - patient
   /api/v1/patients/relatives:
     get:
       consumes:
@@ -207,39 +240,6 @@ paths:
       summary: get profile of relatives account
       tags:
       - relative
-  /api/v2/patients/{patient-id}:
-    put:
-      consumes:
-      - application/json
-      description: update patient profile
-      parameters:
-      - description: Patient ID (UUID)
-        in: path
-        name: patient-id
-        required: true
-        type: string
-      - description: account creation data
-        in: body
-        name: form
-        required: true
-        schema:
-          $ref: '#/definitions/patientcommands.PatientProfileCmdDTO'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: data
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: Bad request error
-          schema: {}
-      security:
-      - ApiKeyAuth: []
-      summary: update patient profile
-      tags:
-      - patient
   /ping:
     get:
       consumes:

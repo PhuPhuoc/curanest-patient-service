@@ -16,7 +16,7 @@ import (
 // @Param			update		form		body					patientcommands.PatientProfileCmdDTO	true	"account creation data"
 // @Success		201			{object}	map[string]interface{}	"data"
 // @Failure		401			{object}	error					"Bad request error"
-// @Router			/api/v2/patients/{patient-id} [put]
+// @Router			/api/v1/patients/{patient-id} [put]
 // @Security		ApiKeyAuth
 func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -34,7 +34,7 @@ func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 
 		patientUUID, err := uuid.Parse(patientId)
 		if err != nil {
-			common.ResponseError(ctx, common.NewBadRequestError().WithReason("id invalid (not a uuid"))
+			common.ResponseError(ctx, common.NewBadRequestError().WithReason("id invalid (not a uuid)"))
 			return
 		}
 
