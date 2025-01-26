@@ -119,6 +119,11 @@ paths:
       - application/json
       description: update patient profile
       parameters:
+      - description: Patient ID (UUID)
+        in: path
+        name: patient-id
+        required: true
+        type: string
       - description: account creation data
         in: body
         name: form

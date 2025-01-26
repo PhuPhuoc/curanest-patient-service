@@ -112,6 +112,13 @@ const docTemplate = `{
                 "summary": "update patient profile",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Patient ID (UUID)",
+                        "name": "patient-id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "account creation data",
                         "name": "form",
                         "in": "body",

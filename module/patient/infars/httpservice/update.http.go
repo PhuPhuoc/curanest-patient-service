@@ -7,16 +7,17 @@ import (
 	"github.com/google/uuid"
 )
 
-// @Summary		update patient profile
-// @Description	update patient profile
-// @Tags			patient
-// @Accept			json
-// @Produce		json
-// @Param			update	form		body					patientcommands.PatientProfileCmdDTO	true	"account creation data"
-// @Success		200		{object}	map[string]interface{}	"data"
-// @Failure		400		{object}	error					"Bad request error"
-// @Router			/api/v1/patients/{patient-id} [put]
-// @Security		ApiKeyAuth
+//	@Summary		update patient profile
+//	@Description	update patient profile
+//	@Tags			patient
+//	@Accept			json
+//	@Produce		json
+//	@Param			patient-id	path		string					true									"Patient ID (UUID)"
+//	@Param			update		form		body					patientcommands.PatientProfileCmdDTO	true	"account creation data"
+//	@Success		200			{object}	map[string]interface{}	"data"
+//	@Failure		400			{object}	error					"Bad request error"
+//	@Router			/api/v1/patients/{patient-id} [put]
+//	@Security		ApiKeyAuth
 func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var dto patientcommands.PatientProfileCmdDTO
