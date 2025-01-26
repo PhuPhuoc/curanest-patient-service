@@ -1,6 +1,7 @@
 package patientrepository
 
 import (
+	"strings"
 	"time"
 
 	patientdomain "github.com/PhuPhuoc/curanest-patient-service/module/patient/domain"
@@ -9,17 +10,28 @@ import (
 
 const (
 	table   = `patients`
-	field   = `id, relatives_id, full_name, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse`
-	mapping = `:id, :relatives_id, :full_name, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse`
+	field   = `id, relatives_id, full_name, gender, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse`
+	mapping = `:id, :relatives_id, :full_name, :gender, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse`
 
-	getField   = `id, relatives_id, full_name, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse, created_at, updated_at`
-	getMapping = `:id, :relatives_id, :full_name, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse, :created_at, :updated_at`
+	getField   = `id, relatives_id, full_name, gender, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse, created_at, updated_at`
+	getMapping = `:id, :relatives_id, :full_name, :gender, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse, :created_at, :updated_at`
 )
+
+func SetFieldForPatient() string {
+	fields := []string{"full_name", "gender", "dob", "phone_number", "address", "ward", "district", "city", "desc_pathology", "note_for_nurse"}
+	setFields := ""
+	for _, field := range fields {
+		setFields += field + " = :" + field + ", "
+	}
+	setFields = strings.TrimSuffix(setFields, ", ")
+	return setFields
+}
 
 type PatientDTO struct {
 	Id            uuid.UUID  `db:"id"`
 	RelativeId    uuid.UUID  `db:"relatives_id"`
 	FullName      string     `db:"full_name"`
+	Gender        bool       `db:"gender"`
 	Dob           string     `db:"dob"`
 	PhoneNumber   string     `db:"phone_number"`
 	Address       string     `db:"address"`
@@ -36,6 +48,7 @@ func (dto *PatientDTO) ToEntity() (*patientdomain.Patient, error) {
 	return patientdomain.NewPatient(
 		dto.Id,
 		dto.RelativeId,
+		dto.Gender,
 		dto.FullName,
 		dto.Dob,
 		dto.PhoneNumber,
@@ -55,6 +68,7 @@ func ToDTO(data *patientdomain.Patient) *PatientDTO {
 		Id:            data.GetID(),
 		RelativeId:    data.GetRelativesID(),
 		FullName:      data.GetFullName(),
+		Gender:        data.GetGender(),
 		Dob:           data.GetDOB(),
 		PhoneNumber:   data.GetPhoneNumber(),
 		Address:       data.GetAddress(),

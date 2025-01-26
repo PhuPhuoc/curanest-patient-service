@@ -4,6 +4,7 @@ CREATE TABLE `patients` (
     `id` varchar(36) NOT NULL,
     `relatives_id` varchar(36) NOT NULL,
     `full_name` varchar(50) NOT NULL,
+    `gender` bool NOT NULL,
     `dob` varchar(12) DEFAULT NULL,
     `phone_number` varchar(12) NOT NULL,
     `address` varchar(300) NOT NULL,

@@ -10,8 +10,9 @@ type Patient struct {
 	id             uuid.UUID
 	relatives_id   uuid.UUID
 	full_name      string
-	phone_number   string
+	gender         bool
 	dob            string
+	phone_number   string
 	address        string
 	ward           string
 	district       string
@@ -23,7 +24,7 @@ type Patient struct {
 }
 
 func NewPatient(
-	id, relativesId uuid.UUID,
+	id, relativesId uuid.UUID, gen bool,
 	fullName, dob, phoneNumber,
 	address, ward, district, city,
 	descPathology, noteForNurse string,
@@ -33,6 +34,7 @@ func NewPatient(
 		id:             id,
 		relatives_id:   relativesId,
 		full_name:      fullName,
+		gender:         gen,
 		phone_number:   phoneNumber,
 		dob:            dob,
 		address:        address,
@@ -56,6 +58,10 @@ func (a *Patient) GetRelativesID() uuid.UUID {
 
 func (a *Patient) GetFullName() string {
 	return a.full_name
+}
+
+func (a *Patient) GetGender() bool {
+	return a.gender
 }
 
 func (a *Patient) GetPhoneNumber() string {

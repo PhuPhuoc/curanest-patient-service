@@ -8,7 +8,7 @@ definitions:
       total:
         type: integer
     type: object
-  patientcommands.CreatePatientProfileCmdDTO:
+  patientcommands.PatientProfileCmdDTO:
     properties:
       address:
         type: string
@@ -24,6 +24,8 @@ definitions:
         type: string
       full-name:
         type: string
+      gender:
+        type: boolean
       note-for-nurse:
         type: string
       phone-number:
@@ -45,6 +47,8 @@ definitions:
         type: string
       full-name:
         type: string
+      gender:
+        type: boolean
       password:
         type: string
       phone-number:
@@ -92,7 +96,7 @@ paths:
         name: form
         required: true
         schema:
-          $ref: '#/definitions/patientcommands.CreatePatientProfileCmdDTO'
+          $ref: '#/definitions/patientcommands.PatientProfileCmdDTO'
       produces:
       - application/json
       responses:
@@ -107,6 +111,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: create patient profile
+      tags:
+      - patient
+  /api/v1/patients/{patient-id}:
+    put:
+      consumes:
+      - application/json
+      description: update patient profile
+      parameters:
+      - description: account creation data
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/patientcommands.PatientProfileCmdDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: update patient profile
       tags:
       - patient
   /api/v1/patients/relatives:

@@ -40,7 +40,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/patientcommands.CreatePatientProfileCmdDTO"
+                            "$ref": "#/definitions/patientcommands.PatientProfileCmdDTO"
                         }
                     }
                 ],
@@ -77,6 +77,50 @@ const docTemplate = `{
                     "patient"
                 ],
                 "summary": "get all patients belong to relatives user",
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/api/v1/patients/{patient-id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update patient profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "update patient profile",
+                "parameters": [
+                    {
+                        "description": "account creation data",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/patientcommands.PatientProfileCmdDTO"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "data",
@@ -252,7 +296,7 @@ const docTemplate = `{
                 }
             }
         },
-        "patientcommands.CreatePatientProfileCmdDTO": {
+        "patientcommands.PatientProfileCmdDTO": {
             "type": "object",
             "properties": {
                 "address": {
@@ -275,6 +319,9 @@ const docTemplate = `{
                 },
                 "full-name": {
                     "type": "string"
+                },
+                "gender": {
+                    "type": "boolean"
                 },
                 "note-for-nurse": {
                     "type": "string"
@@ -307,6 +354,9 @@ const docTemplate = `{
                 },
                 "full-name": {
                     "type": "string"
+                },
+                "gender": {
+                    "type": "boolean"
                 },
                 "password": {
                     "type": "string"

@@ -6,9 +6,10 @@ import (
 	patientdomain "github.com/PhuPhuoc/curanest-patient-service/module/patient/domain"
 )
 
-func (r *patientRepo) Create(ctx context.Context, entity *patientdomain.Patient) error {
+func (r *patientRepo) Update(ctx context.Context, entity *patientdomain.Patient) error {
+	setField := SetFieldForPatient()
 	dto := ToDTO(entity)
-	query := `insert into ` + table + ` (` + field + `) values (` + mapping + `)`
+	query := `update ` + table + ` set ` + setField + ` where id = :id`
 
 	if _, err := r.db.NamedExec(query, dto); err != nil {
 		return err

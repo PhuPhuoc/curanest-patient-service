@@ -2,6 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE `relatives` (
     `id` varchar(36) NOT NULL,
+    `gender` bool NOT NULL,
     `dob` varchar(12) DEFAULT NULL,
     `address` varchar(300) NOT NULL,
     `ward` varchar(70) DEFAULT NULL,

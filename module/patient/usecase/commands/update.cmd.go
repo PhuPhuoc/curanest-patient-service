@@ -5,28 +5,33 @@ import (
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	patientdomain "github.com/PhuPhuoc/curanest-patient-service/module/patient/domain"
+	"github.com/google/uuid"
 )
 
-type createPatientHandler struct {
+type updatePatientHandler struct {
 	cmdRepo PatientCommandRepo
 }
 
-func NewCreatePatientHandler(cmdRepo PatientCommandRepo) *createPatientHandler {
-	return &createPatientHandler{
+func NewUpdatePatientHandler(cmdRepo PatientCommandRepo) *updatePatientHandler {
+	return &updatePatientHandler{
 		cmdRepo: cmdRepo,
 	}
 }
 
-func (h *createPatientHandler) Handle(ctx context.Context, dto *PatientProfileCmdDTO) error {
+func (h *updatePatientHandler) Handle(ctx context.Context, patientId *uuid.UUID, dto *PatientProfileCmdDTO) error {
 	requester, ok := ctx.Value(common.KeyRequester).(common.Requester)
 	if !ok {
 		return common.NewUnauthorizedError()
 	}
 	sub := requester.UserId()
 
-	patient_id := common.GenUUID()
+	if patientId == nil {
+		return common.NewInternalServerError().
+			WithReason("cannot get patient id to update patient profile")
+	}
+
 	entity, _ := patientdomain.NewPatient(
-		patient_id,
+		*patientId,
 		sub,
 		dto.Gender,
 		dto.FullName,
@@ -41,9 +46,9 @@ func (h *createPatientHandler) Handle(ctx context.Context, dto *PatientProfileCm
 		nil,
 		nil,
 	)
-	if err := h.cmdRepo.Create(ctx, entity); err != nil {
+	if err := h.cmdRepo.Update(ctx, entity); err != nil {
 		return common.NewInternalServerError().
-			WithReason("cannot create patient profile").
+			WithReason("cannot update patient profile").
 			WithInner(err.Error())
 	}
 

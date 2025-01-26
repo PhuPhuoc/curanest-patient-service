@@ -25,6 +25,7 @@ type ResponseAccountDTO struct {
 }
 
 type RelativesInfoDTO struct {
+	Gender   bool   `json:"gender"`
 	Dob      string `json:"dob"`
 	Address  string `json:"address"`
 	Ward     string `json:"ward"`
@@ -34,6 +35,7 @@ type RelativesInfoDTO struct {
 
 func toDTO(data *relativesdomain.Relatives) *RelativesInfoDTO {
 	dto := &RelativesInfoDTO{
+		Gender:   data.GetGender(),
 		Dob:      data.GetDOB(),
 		Address:  data.GetAddress(),
 		Ward:     data.GetWard(),

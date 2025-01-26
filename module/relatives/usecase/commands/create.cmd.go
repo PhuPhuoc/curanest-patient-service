@@ -11,6 +11,7 @@ import (
 
 type CreateRelativeAccountCmdDTO struct {
 	FullName    string `json:"full-name"`
+	Gender      bool   `json:"gender"`
 	PhoneNumber string `json:"phone-number"`
 	Email       string `json:"email"`
 	Password    string `json:"password"`
@@ -70,6 +71,7 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 	accid := uuid.MustParse(resp.Id)
 	entity, _ := relativesdomain.NewRelatives(
 		accid,
+		dto.Gender,
 		dto.Dob, dto.Address, dto.Ward,
 		dto.District,
 		dto.City,

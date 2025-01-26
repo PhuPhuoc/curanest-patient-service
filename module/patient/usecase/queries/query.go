@@ -8,6 +8,7 @@ import (
 )
 
 type Queries struct {
+	FindById                *findByIdHandler
 	GetPatientByRelativesId *getPatientByRelIdHandler
 }
 
@@ -17,6 +18,9 @@ type Builder interface {
 
 func NewPatientQueryWithBuilder(b Builder) Queries {
 	return Queries{
+		FindById: NewFindByIdHandler(
+			b.BuildPatientQueryRepo(),
+		),
 		GetPatientByRelativesId: NewGetPatientByRelIdHandler(
 			b.BuildPatientQueryRepo(),
 		),
@@ -24,5 +28,6 @@ func NewPatientQueryWithBuilder(b Builder) Queries {
 }
 
 type PatientQueryRepo interface {
+	FindByID(ctx context.Context, patientId uuid.UUID) (*patientdomain.Patient, error)
 	GetPatientsByRelId(ctx context.Context, relativesId uuid.UUID) ([]patientdomain.Patient, error)
 }

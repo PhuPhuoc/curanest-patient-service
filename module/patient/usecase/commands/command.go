@@ -8,7 +8,8 @@ import (
 )
 
 type Commands struct {
-	CreatePatientProfile createPatientHandler
+	CreatePatientProfile *createPatientHandler
+	UpdatePatientProfile *updatePatientHandler
 }
 
 type Builder interface {
@@ -18,15 +19,18 @@ type Builder interface {
 
 func NewPatientCmdWithBuilder(b Builder) Commands {
 	return Commands{
-		CreatePatientProfile: *NewCreatePatientHandler(
+		CreatePatientProfile: NewCreatePatientHandler(
 			b.BuildPatientCmdRepo(),
-			b.BuildReletivesFetcherCmdRepo(),
+		),
+		UpdatePatientProfile: NewUpdatePatientHandler(
+			b.BuildPatientCmdRepo(),
 		),
 	}
 }
 
 type PatientCommandRepo interface {
 	Create(ctx context.Context, entity *patientdomain.Patient) error
+	Update(ctx context.Context, entity *patientdomain.Patient) error
 }
 
 type ReletiveFetcher interface {
