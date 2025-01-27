@@ -9,7 +9,7 @@ import (
 
 func (r *relativesRepo) VerifyRelatives(ctx context.Context, relativeId *uuid.UUID) error {
 	var verify bool
-	query := `select exists (select 1 from ` + table + ` where id=?)`
+	query := `select exists (select 1 from ` + TABLE + ` where id=?)`
 	if err := r.db.GetContext(ctx, &verify, query, relativeId.String()); err != nil {
 		return err
 	}

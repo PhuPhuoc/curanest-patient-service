@@ -20,7 +20,6 @@ type Patient struct {
 	desc_pathology string
 	note_for_nurse string
 	created_at     *time.Time
-	updated_at     *time.Time
 }
 
 func NewPatient(
@@ -28,7 +27,7 @@ func NewPatient(
 	fullName, dob, phoneNumber,
 	address, ward, district, city,
 	descPathology, noteForNurse string,
-	createdAt, updatedAt *time.Time,
+	createdAt *time.Time,
 ) (*Patient, error) {
 	return &Patient{
 		id:             id,
@@ -44,7 +43,6 @@ func NewPatient(
 		desc_pathology: descPathology,
 		note_for_nurse: noteForNurse,
 		created_at:     createdAt,
-		updated_at:     updatedAt,
 	}, nil
 }
 
@@ -98,8 +96,4 @@ func (a *Patient) GetNoteForNurse() string {
 
 func (a *Patient) GetCreatedAt() *time.Time {
 	return a.created_at
-}
-
-func (a *Patient) GetUpdatedAt() *time.Time {
-	return a.updated_at
 }

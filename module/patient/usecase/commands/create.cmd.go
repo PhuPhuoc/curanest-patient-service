@@ -39,7 +39,6 @@ func (h *createPatientHandler) Handle(ctx context.Context, dto *PatientProfileCm
 		dto.DescPathology,
 		dto.NoteForNurse,
 		nil,
-		nil,
 	)
 	if err := h.cmdRepo.Create(ctx, entity); err != nil {
 		return common.NewInternalServerError().

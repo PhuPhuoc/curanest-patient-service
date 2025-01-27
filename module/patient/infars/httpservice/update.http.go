@@ -60,6 +60,6 @@ func (s *patientHttpService) handleUpdatePatientProfile() gin.HandlerFunc {
 			common.ResponseError(ctx, err)
 			return
 		}
-		common.ResponseCreated(ctx)
+		common.ResponseUpdated(ctx)
 	}
 }

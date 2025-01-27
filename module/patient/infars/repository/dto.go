@@ -1,31 +1,17 @@
 package patientrepository
 
 import (
-	"strings"
 	"time"
 
 	patientdomain "github.com/PhuPhuoc/curanest-patient-service/module/patient/domain"
 	"github.com/google/uuid"
 )
 
-const (
-	table   = `patients`
-	field   = `id, relatives_id, full_name, gender, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse`
-	mapping = `:id, :relatives_id, :full_name, :gender, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse`
-
-	getField   = `id, relatives_id, full_name, gender, dob, phone_number, address, ward, district, city, desc_pathology, note_for_nurse, created_at, updated_at`
-	getMapping = `:id, :relatives_id, :full_name, :gender, :dob, :phone_number, :address, :ward, :district, :city, :desc_pathology, :note_for_nurse, :created_at, :updated_at`
+var (
+	TABLE        = `patients`
+	FIELD        = []string{"id", "relatives_id", "full_name", "gender", "dob", "phone_number", "address", "ward", "district", "city", "desc_pathology", "note_for_nurse"}
+	UPDATE_FIELD = []string{"full_name", "gender", "dob", "phone_number", "address", "ward", "district", "city", "desc_pathology", "note_for_nurse"}
 )
-
-func SetFieldForPatient() string {
-	fields := []string{"full_name", "gender", "dob", "phone_number", "address", "ward", "district", "city", "desc_pathology", "note_for_nurse"}
-	setFields := ""
-	for _, field := range fields {
-		setFields += field + " = :" + field + ", "
-	}
-	setFields = strings.TrimSuffix(setFields, ", ")
-	return setFields
-}
 
 type PatientDTO struct {
 	Id            uuid.UUID  `db:"id"`
@@ -41,7 +27,6 @@ type PatientDTO struct {
 	DescPathology string     `db:"desc_pathology"`
 	NoteForNurse  string     `db:"note_for_nurse"`
 	CreatedAt     *time.Time `db:"created_at"`
-	UpdateAt      *time.Time `db:"updated_at"`
 }
 
 func (dto *PatientDTO) ToEntity() (*patientdomain.Patient, error) {
@@ -59,7 +44,6 @@ func (dto *PatientDTO) ToEntity() (*patientdomain.Patient, error) {
 		dto.DescPathology,
 		dto.NoteForNurse,
 		dto.CreatedAt,
-		dto.UpdateAt,
 	)
 }
 

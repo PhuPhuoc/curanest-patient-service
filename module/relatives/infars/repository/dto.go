@@ -5,10 +5,10 @@ import (
 	"github.com/google/uuid"
 )
 
-const (
-	table   = `relatives`
-	field   = `id, gender, dob, address, ward, district, city`
-	mapping = `:id, :gender, :dob, :address, :ward, :district, :city`
+var (
+	TABLE        = `relatives`
+	FIELD        = []string{"id", "gender", "dob", "address", "ward", "district", "city"}
+	UPDATE_FIELD = []string{"gender", "dob", "address", "ward", "district", "city"}
 )
 
 type RelativesDTO struct {

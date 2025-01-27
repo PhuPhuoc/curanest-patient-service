@@ -44,7 +44,6 @@ func (h *updatePatientHandler) Handle(ctx context.Context, patientId *uuid.UUID,
 		dto.DescPathology,
 		dto.NoteForNurse,
 		nil,
-		nil,
 	)
 	if err := h.cmdRepo.Update(ctx, entity); err != nil {
 		return common.NewInternalServerError().

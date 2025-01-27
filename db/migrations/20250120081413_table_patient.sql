@@ -13,8 +13,8 @@ CREATE TABLE `patients` (
     `city` varchar(70) NOT NULL,
     `desc_pathology` longtext DEFAULT NULL,
     `note_for_nurse` longtext DEFAULT NULL,
-    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+    `deleted_at` datetime,
     PRIMARY KEY (`id`),
     UNIQUE KEY `unique_phone` (`phone_number`),
     CONSTRAINT `fk_relatives_patient` FOREIGN KEY (`relatives_id`) REFERENCES `relatives` (`id`) ON UPDATE CASCADE
