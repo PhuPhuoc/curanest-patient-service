@@ -54,6 +54,29 @@ definitions:
       ward:
         type: string
     type: object
+  relativescommands.UpdateRelativeAccountCmdDTO:
+    properties:
+      address:
+        type: string
+      avatar:
+        type: string
+      city:
+        type: string
+      district:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      full-name:
+        type: string
+      gender:
+        type: boolean
+      phone-number:
+        type: string
+      ward:
+        type: string
+    type: object
   relativesqueries.FieldFilterAccount:
     properties:
       email:
@@ -188,6 +211,39 @@ paths:
         "400":
           description: Bad request error
           schema: {}
+      summary: create relatives account
+      tags:
+      - relative
+  /api/v1/relatives/{relatives-id}:
+    put:
+      consumes:
+      - application/json
+      description: create relatives account
+      parameters:
+      - description: Account ID (UUID)
+        in: path
+        name: relatives-id
+        required: true
+        type: string
+      - description: account creation data
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/relativescommands.UpdateRelativeAccountCmdDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: create relatives account
       tags:
       - relative

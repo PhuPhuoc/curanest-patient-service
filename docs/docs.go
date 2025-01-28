@@ -259,6 +259,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/relatives/{relatives-id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "create relatives account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "relative"
+                ],
+                "summary": "create relatives account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID (UUID)",
+                        "name": "relatives-id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "account creation data",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/relativescommands.UpdateRelativeAccountCmdDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/ping": {
             "get": {
                 "description": "ping server",
@@ -364,6 +415,41 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                },
+                "phone-number": {
+                    "type": "string"
+                },
+                "ward": {
+                    "type": "string"
+                }
+            }
+        },
+        "relativescommands.UpdateRelativeAccountCmdDTO": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "dob": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "full-name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "boolean"
                 },
                 "phone-number": {
                     "type": "string"

@@ -2,7 +2,6 @@ package relativesexternalrpc
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativesqueries "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/queries"
@@ -11,7 +10,8 @@ import (
 func (ex *externalAccountService) GetAccountProfileRPC(ctx context.Context) (*relativesqueries.ResponseAccountDTO, error) {
 	token, ok := ctx.Value(common.KeyToken).(string)
 	if !ok {
-		return nil, fmt.Errorf("missing token to fetching data from other service")
+		return nil, common.NewInternalServerError().
+			WithReason("cannot get accounts profile").WithInner("missing token to fetching data from other service")
 	}
 
 	response, err := common.CallExternalAPI(ctx, common.RequestOptions{

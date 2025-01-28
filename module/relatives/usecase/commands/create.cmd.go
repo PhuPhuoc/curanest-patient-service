@@ -2,33 +2,11 @@ package relativescommands
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativesdomain "github.com/PhuPhuoc/curanest-patient-service/module/relatives/domain"
 	"github.com/google/uuid"
 )
-
-type CreateRelativeAccountCmdDTO struct {
-	FullName    string `json:"full-name"`
-	Gender      bool   `json:"gender"`
-	PhoneNumber string `json:"phone-number"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-	Dob         string `json:"dob"`
-	Address     string `json:"address"`
-	Ward        string `json:"ward"`
-	District    string `json:"district"`
-	City        string `json:"city"`
-}
-
-type AccountInfoDTO struct {
-	RoleName    string `json:"role-name"`
-	FullName    string `json:"full-name"`
-	PhoneNumber string `json:"phone-number"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-}
 
 type createRelativesAccountHandler struct {
 	cmdRepo    RelativeCommandRepo
@@ -58,7 +36,6 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 
 	resp, err := h.accService.CreateAccountRPC(ctx, accdto)
 	if err != nil {
-		fmt.Println("error: ", err)
 		return err
 	}
 
@@ -72,7 +49,9 @@ func (h *createRelativesAccountHandler) Handle(ctx context.Context, dto *CreateR
 	entity, _ := relativesdomain.NewRelatives(
 		accid,
 		dto.Gender,
-		dto.Dob, dto.Address, dto.Ward,
+		dto.Dob,
+		dto.Address,
+		dto.Ward,
 		dto.District,
 		dto.City,
 	)

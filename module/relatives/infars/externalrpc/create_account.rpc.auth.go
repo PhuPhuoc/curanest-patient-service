@@ -2,7 +2,6 @@ package relativesexternalrpc
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/PhuPhuoc/curanest-patient-service/common"
 	relativescommands "github.com/PhuPhuoc/curanest-patient-service/module/relatives/usecase/commands"
@@ -15,7 +14,8 @@ func (ex *externalAccountService) CreateAccountRPC(ctx context.Context, entity *
 		Payload: entity,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("cannot call external api - %v", err)
+		return nil, common.NewInternalServerError().
+			WithReason("cannot create accounts").WithInner("cannot call external api - " + err.Error())
 	}
 
 	success, ok := response["success"].(bool)
