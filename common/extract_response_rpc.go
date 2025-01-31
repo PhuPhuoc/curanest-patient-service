@@ -5,12 +5,6 @@ import (
 )
 
 func ExtractErrorFromResponse(response map[string]interface{}) error {
-	// rawErr, ok := response["error"].(map[string]interface{})
-	// if !ok {
-	// 	resp := NewInternalServerError().WithReason("error response is not in expected format")
-	// 	return resp
-	// }
-
 	var appErr AppError
 	jsonData, err := json.Marshal(response["error"])
 	if err != nil {
