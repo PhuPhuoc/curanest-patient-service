@@ -20,7 +20,7 @@ func (s *relativesHttpService) handleGetRelativesAccounts() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var dto relativesqueries.FilterAccountQuery
 		if err := ctx.BindJSON(&dto); err != nil {
-			common.ResponseError(ctx, err)
+			common.ResponseError(ctx, common.NewBadRequestError().WithReason("invalid request body").WithInner(err.Error()))
 			return
 		}
 

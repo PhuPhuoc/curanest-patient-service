@@ -20,7 +20,7 @@ func (s *patientHttpService) handleCreatePatientProfile() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var dto patientcommands.PatientProfileCmdDTO
 		if err := ctx.BindJSON(&dto); err != nil {
-			common.ResponseError(ctx, err)
+			common.ResponseError(ctx, common.NewBadRequestError().WithReason("invalid request body").WithInner(err.Error()))
 			return
 		}
 
