@@ -11,7 +11,7 @@ import (
 func (r *patientRepo) FindByID(ctx context.Context, id uuid.UUID) (*patientdomain.Patient, error) {
 	var dto PatientDTO
 	where := "id=?"
-	query := common.GenerateSQLQueries(common.FIND, TABLE, FIELD, &where)
+	query := common.GenerateSQLQueries(common.FIND_WITH_CREATED_AT, TABLE, FIELD, &where)
 	if err := r.db.Get(&dto, query, id); err != nil {
 		return nil, err
 	}

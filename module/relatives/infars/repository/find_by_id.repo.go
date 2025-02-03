@@ -11,7 +11,7 @@ import (
 func (r *relativesRepo) FindById(ctx context.Context, id uuid.UUID) (*relativesdomain.Relatives, error) {
 	var dto RelativesDTO
 	where := "id=?"
-	query := common.GenerateSQLQueries(common.FIND_WITH_OUT_CREATED_AT, TABLE, FIELD, &where)
+	query := common.GenerateSQLQueries(common.FIND, TABLE, FIELD, &where)
 	if err := r.db.Get(&dto, query, id); err != nil {
 		return nil, err
 	}
