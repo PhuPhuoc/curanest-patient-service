@@ -40,7 +40,7 @@ func (s *relativesHttpService) Routes(g *gin.RouterGroup) {
 			s.handleGetRelativesAccounts(),
 		)
 		relatives_route.PUT(
-			":relatives-id",
+			"/:relatives-id",
 			middleware.RequireAuth(s.auth),
 			s.handleUpdateRelativesAccount(),
 		)
