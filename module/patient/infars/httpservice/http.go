@@ -38,7 +38,7 @@ func (s *patientHttpService) Routes(g *gin.RouterGroup) {
 		patient_route.PUT(
 			"/:patient-id",
 			middleware.RequireAuth(s.auth),
-			middleware.RequireRole("relatives"),
+			middleware.RequireRole("nurse, relatives"),
 			s.handleUpdatePatientProfile(),
 		)
 
