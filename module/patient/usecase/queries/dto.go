@@ -9,6 +9,7 @@ type PatientDTO struct {
 	Id            uuid.UUID `json:"id"`
 	RelativesId   uuid.UUID `json:"-"`
 	FullName      string    `json:"full-name"`
+	Gender        bool      `json:"gender"`
 	Dob           string    `json:"dob"`
 	PhoneNumber   string    `json:"phone-number"`
 	Address       string    `json:"address"`
@@ -24,6 +25,7 @@ func toDTO(data *patientdomain.Patient) *PatientDTO {
 		Id:            data.GetID(),
 		RelativesId:   data.GetRelativesID(),
 		FullName:      data.GetFullName(),
+		Gender:        data.GetGender(),
 		Dob:           data.GetDOB(),
 		PhoneNumber:   data.GetPhoneNumber(),
 		Address:       data.GetAddress(),
