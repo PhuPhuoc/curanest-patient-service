@@ -6,8 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// @Summary		get patient profile
-// @Description	get patient profile
+// @Summary		get patient's profile by patient-id
+// @Description	get patient's profile by patient-id
 // @Tags			patient
 // @Accept			json
 // @Produce		json

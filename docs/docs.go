@@ -99,7 +99,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "get patient profile",
+                "description": "get patient's profile by patient-id",
                 "consumes": [
                     "application/json"
                 ],
@@ -109,7 +109,7 @@ const docTemplate = `{
                 "tags": [
                     "patient"
                 ],
-                "summary": "get patient profile",
+                "summary": "get patient's profile by patient-id",
                 "parameters": [
                     {
                         "type": "string",
