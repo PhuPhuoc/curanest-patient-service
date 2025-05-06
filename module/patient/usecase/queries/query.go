@@ -10,6 +10,8 @@ import (
 type Queries struct {
 	FindById                *findByIdHandler
 	GetPatientByRelativesId *getPatientByRelIdHandler
+
+	FindRelatviesIdByPatientId *findRelativesIdHandler
 }
 
 type Builder interface {
@@ -22,6 +24,10 @@ func NewPatientQueryWithBuilder(b Builder) Queries {
 			b.BuildPatientQueryRepo(),
 		),
 		GetPatientByRelativesId: NewGetPatientByRelIdHandler(
+			b.BuildPatientQueryRepo(),
+		),
+
+		FindRelatviesIdByPatientId: NewFindRelatviesIdHandler(
 			b.BuildPatientQueryRepo(),
 		),
 	}

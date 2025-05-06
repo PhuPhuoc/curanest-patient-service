@@ -193,6 +193,33 @@ paths:
       summary: update patient profile
       tags:
       - patient
+  /api/v1/patients/{patient-id}/relatives-id:
+    get:
+      consumes:
+      - application/json
+      description: get relatives-id of patient by patient-id
+      parameters:
+      - description: patient ID (UUID)
+        in: path
+        name: patient-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request error
+          schema: {}
+      security:
+      - ApiKeyAuth: []
+      summary: get relatives-id of patient by patient-id
+      tags:
+      - patient
   /api/v1/patients/relatives:
     get:
       consumes:

@@ -54,5 +54,12 @@ func (s *patientHttpService) Routes(g *gin.RouterGroup) {
 			// middleware.RequireRole("nurse, staff, relatives"),
 			s.handleGetPatientProfile(),
 		)
+
+		patient_route.GET(
+			"/:patient-id/relatives-id",
+			// middleware.RequireAuth(s.auth),
+			// middleware.RequireRole("nurse, staff, relatives"),
+			s.handleGetRelatviesId(),
+		)
 	}
 }

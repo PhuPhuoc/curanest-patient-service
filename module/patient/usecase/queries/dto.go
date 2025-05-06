@@ -5,6 +5,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type ResponseRelativesIdOfPatient struct {
+	RelativesId uuid.UUID `json:"relatives-id"`
+}
+
 type PatientDTO struct {
 	Id            uuid.UUID `json:"id"`
 	RelativesId   uuid.UUID `json:"-"`

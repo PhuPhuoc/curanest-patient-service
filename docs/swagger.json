@@ -175,6 +175,48 @@
                 }
             }
         },
+        "/api/v1/patients/{patient-id}/relatives-id": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get relatives-id of patient by patient-id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patient"
+                ],
+                "summary": "get relatives-id of patient by patient-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "patient ID (UUID)",
+                        "name": "patient-id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/api/v1/relatives": {
             "post": {
                 "description": "create relatives account",
